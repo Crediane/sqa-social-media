@@ -14,33 +14,27 @@ Principais rotas da aplicação:
 
 ## Como Rodar
 
-Pré-requisitos:
+**Pré-requisitos:**
+- Git
+- Docker e Docker Compose instalados
 
-- Java 17+
-- Node.js 18+
-- npm
-- MySQL configurado para o ambiente de desenvolvimento
+**Passo a passo:**
 
-API:
+1. Clone o repositório e acesse a pasta do projeto:
+`bash
+git clone https://github.com/Crediane/trabalho-docker-nuvem.git
+cd sqa-social-media
+`
 
-```bash
-cd api
-./mvnw spring-boot:run
-```
+2. Configure as variáveis de ambiente:
+Como medida de segurança, as senhas reais não estão versionadas. Crie um arquivo chamado `.env` na raiz do projeto (ou faça uma cópia do `.env.example`) e preencha com as credenciais locais desejadas para o banco de dados.
 
-Frontend:
+3. Construa a imagem e suba os serviços:
+`bash
+docker compose up --build -d
+`
 
-```bash
-cd client
-npm install
-npm run dev
-```
-
-O frontend usa `NEXT_PUBLIC_BASE_URL` para definir a URL da API. Exemplo de `.env` em `client/`:
-
-```env
-NEXT_PUBLIC_BASE_URL=http://localhost:8080
-```
+O Docker se encarregará de baixar as imagens, criar a rede interna e subir o banco de dados MySQL e a API Spring Boot. A API estará acessível em `http://localhost:8080`.
 
 ## Documentações
 
