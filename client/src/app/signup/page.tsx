@@ -65,26 +65,19 @@ export default function SignUp() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("1. O botão funcionou e disparou a função handleSubmit!");
-    
     setGeneralError("");
 
     if (!validateForm()) {
-      console.log("2. A validação falhou e barrou o envio escondido do usuário!");
-      // Colocamos barras aqui para FORÇAR o envio, ignorando a trava do frontend:
-      // return; 
+      return;
     }
 
-    console.log("3. Validação ignorada/passou! Tentando enviar dados para a API...");
     setIsLoading(true);
 
     try {
       const response = await authService.signUp({ email, password });
-      console.log("4. API respondeu com sucesso!", response);
       login({ id: response.id, email: response.email });
       router.push("/");
     } catch (err: unknown) {
-      console.log("5. API retornou um erro:", err);
       if (err instanceof AxiosError) {
         setGeneralError(
           err.response?.data?.message || "Erro ao criar conta. Tente novamente."
