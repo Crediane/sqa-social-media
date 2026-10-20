@@ -20,6 +20,18 @@ test.describe('API - /posts', () => {
     }
   });
 
+  test('GET /posts retorna o objeto "reactions" com likes e dislikes numéricos em cada post', async ({ request }) => {
+    const resp = await request.get(`${API_URL}/posts`, { params: { limit: 5, skip: 0 } });
+
+    expect(resp.status()).toBe(200);
+    const corpo = await resp.json();
+    expect(corpo.posts).toHaveLength(5);
+    for (const post of corpo.posts) {
+      expect(typeof post.reactions.likes).toBe('number');
+      expect(typeof post.reactions.dislikes).toBe('number');
+    }
+  });
+
   test('POST /posts/{id}/like alterna entre curtir e descurtir, e reflete em /posts/liked', async ({ request }) => {
     const usuario = await criarUsuarioPelaApi(request);
     const postId = 1;
