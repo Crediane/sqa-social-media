@@ -61,6 +61,7 @@ public class PostService {
         post.put("title", postNode.get("title").asText());
         post.put("body", postNode.get("body").asText());
         post.put("liked", likedPostIds.contains(postId));
+        post.put("reactions", extractReactions(postNode));
         
         posts.add(post);
       }
@@ -108,6 +109,7 @@ public class PostService {
         post.put("title", postNode.get("title").asText());
         post.put("body", postNode.get("body").asText());
         post.put("liked", true);
+        post.put("reactions", extractReactions(postNode));
         
         posts.add(post);
       }
@@ -123,6 +125,20 @@ public class PostService {
     } catch (Exception e) {
       throw new RuntimeException("Erro ao buscar posts curtidos: " + e.getMessage(), e);
     }
+  }
+
+  /**
+   * Extrai o objeto "reactions" do post do DummyJSON ({ likes, dislikes }).
+   * Se o campo não existir, devolve zeros para a tela nunca receber "undefined".
+   */
+  private Map<String, Object> extractReactions(JsonNode postNode) {
+    JsonNode reactionsNode = postNode.get("reactions");
+
+    Map<String, Object> reactions = new HashMap<>();
+    reactions.put("likes", reactionsNode != null ? reactionsNode.path("likes").asInt(0) : 0);
+    reactions.put("dislikes", reactionsNode != null ? reactionsNode.path("dislikes").asInt(0) : 0);
+
+    return reactions;
   }
 
   public Map<String, Object> toggleLike(Long postId, Long userId) {

@@ -3,16 +3,12 @@ import "@testing-library/jest-dom";
 import PostCard from "@/components/PostCard";
 import { Post } from "@/service/types";
 
-/**
- * Testes Unitários de Componente (Jest + Testing Library)
- * Testam o componente React PostCard de forma isolada.
- */
-
 const mockPost: Post = {
   id: 1,
   title: "Título de teste",
   body: "Corpo do post de teste",
   liked: false,
+  reactions: { likes: 12, dislikes: 3 },
 };
 
 describe("PostCard", () => {
@@ -54,5 +50,14 @@ describe("PostCard", () => {
     await waitFor(() => {
       expect(screen.getByText("Curtido")).toBeInTheDocument();
     });
+  });
+
+  it("exibe a quantidade de curtidas e descurtidas do post (objeto reactions)", () => {
+    render(
+      <PostCard post={mockPost} isAuthenticated={false} onLike={jest.fn()} />
+    );
+
+    expect(screen.getByTestId("post-likes")).toHaveTextContent("12");
+    expect(screen.getByTestId("post-dislikes")).toHaveTextContent("3");
   });
 });
