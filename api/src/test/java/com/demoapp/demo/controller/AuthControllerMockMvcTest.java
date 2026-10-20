@@ -33,7 +33,7 @@ class AuthControllerMockMvcTest {
 
   @Test
   void signup_comEmailInvalido_deveRetornar422ComMensagemDeEmailInvalido() throws Exception {
-    when(userService.isEmailValid(anyString())).thenReturn(true);
+    when(userService.isEmailValid(anyString())).thenReturn(false);
 
     String requestBody = """
         {
